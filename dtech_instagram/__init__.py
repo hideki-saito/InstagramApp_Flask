@@ -9,7 +9,9 @@ from dtech_instagram.celery import celery
 from dtech_instagram.db import db
 from dtech_instagram.models import *
 
+import dtech_instagram.admin
 import dtech_instagram.bootstrap
+import dtech_instagram.mail
 import dtech_instagram.security
 import dtech_instagram.worker
 import dtech_instagram.views
@@ -25,10 +27,3 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 if app.config.get("SENTRY_DSN"):
     app.config["RAVEN_IGNORE_EXCEPTIONS"] = [HTTPException]
     sentry = Sentry(app)
-
-
-@app.context_processor
-def inject_accounts():
-    return dict(
-        accounts=db.session.query(Account).order_by(Account.username)
-    )

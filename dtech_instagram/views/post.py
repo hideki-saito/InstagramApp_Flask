@@ -1,15 +1,22 @@
+from datetime import datetime
 from flask import *
-from flask_security import login_required
+from flask_security import current_user, login_required
 from flask_wtf import FlaskForm
+import logging
 import os
 import requests
 import shutil
 import uuid
+from werkzeug.exceptions import Forbidden
 from wtforms import fields, validators, widgets
+
+from dtech_instagram.InstagramAPI import Instagram
 
 from dtech_instagram.app import app
 from dtech_instagram.db import db
 from dtech_instagram.models import Account, Post
+
+logger = logging.getLogger(__name__)
 
 
 class PostForm(FlaskForm):
@@ -57,13 +64,45 @@ def upload():
 @login_required
 def account_posts(id):
     account = db.session.query(Account).get(id)
-    return render_template("post/list.html", account=account)
+    if account.user != current_user:
+        raise Forbidden()
+
+    posts = account.posts
+    error = False
+    if "scheduled" in request.args:
+        posts = posts.filter(Post.posted_at == None)
+    elif "posted" in request.args:
+        for i in range(5):
+            try:
+                instagram = Instagram(account.username, account.password, IGDataPath="/tmp/account_%d" % account.id)
+                instagram.login()
+                posts = []
+                for item in instagram.getSelfUserFeed().getItems():
+                    post = Post()
+                    post.image = item.getImageVersions()[0].getUrl()
+                    post.caption = item.getCaption().getText() if item.getCaption() else ""
+                    post.posted_at = datetime.fromtimestamp(item.getDeviceTimestamp())
+                    posts.append(post)
+
+                break
+            except Exception:
+                logger.exception("Error retrieving posted posts", exc_info=True)
+        else:
+            posts = account.posts.filter(Post.posted_at != None)
+            error = True
+    else:
+        return redirect(url_for("account_posts", id=account.id, scheduled="1"))
+
+    return render_template("post/list.html", account=account, error=error, posts=posts)
 
 
 @app.route("/accounts/<int:account_id>/posts/create", methods=("GET", "POST"))
 @login_required
 def create_post(account_id):
     account = db.session.query(Account).get(account_id)
+    if account.user != current_user:
+        raise Forbidden()
+
     form = PostForm()
     if form.validate_on_submit():
         post = Post()
@@ -84,6 +123,9 @@ def create_post(account_id):
 @login_required
 def edit_post(id):
     post = db.session.query(Post).get(id)
+    if post.account.user != current_user:
+        raise Forbidden()
+
     form = PostForm(obj=post)
     if "delete" in request.form:
         account_id = post.account.id

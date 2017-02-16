@@ -8,6 +8,8 @@
     <link href="{{ url_for('static', filename='jquery.datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='sidebar.css') }}" rel="stylesheet" type="text/css" />
 
+    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+
     <style type="text/css">
         #caption { height: 240px; }
     </style>
@@ -21,7 +23,7 @@
                 <li class="sidebar-brand">
                     <a href="{{ url_for('accounts') }}">Manage accounts</a>
                 </li>
-                {% for a in accounts %}
+                {% for a in current_user.accounts %}
                     <li><a href="{{ url_for('account_posts', id=a.id) }}" style="{% if a == account %}color: #fff; font-weight: bold;{% endif %}">{{ a.username }}</a></li>
                 {% endfor %}
             </ul>
@@ -38,6 +40,9 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.email }} <span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                {% if current_user.id == 1 %}
+                                    <li><a href="{{ url_for('admin.index') }}">Admin</a></li>
+                                {% endif %}
                                 <li><a href="{{ url_for('settings') }}">Settings</a></li>
                                 <li role="separator" class="divider"></li>
                                 <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
@@ -66,6 +71,8 @@
         <script src="/static/js/jquery.iframe-transport.js"></script>
         <script src="/static/js/jquery.fileupload.js"></script>
         <script src="/static/jquery.datetimepicker.full.min.js"></script>
+
+        <script type="text/javascript" src="/static/js/fancybox/jquery.fancybox.pack.js"></script>
 
         <!-- Instantiate the widget -->
         <script type="text/javascript">
@@ -117,6 +124,8 @@
                     var d = new Date($(this).text());
                     $(this).text(d.toLocaleString());
                 });
+
+                $(".js-fancybox").fancybox({});
             });
 
         </script>

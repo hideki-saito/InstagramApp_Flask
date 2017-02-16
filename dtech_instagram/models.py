@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.Text())
     active = db.Column(db.Boolean())
     confirmed_at = db.Column(db.DateTime(), nullable=True)
+    max_accounts = db.Column(db.Integer(), default=1)
     roles = db.relationship("Role", secondary=roles_users,
                             backref=db.backref("users", lazy="dynamic"))
 
@@ -29,8 +30,12 @@ class User(db.Model, UserMixin):
 
 class Account(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey("user.id", ondelete="CASCADE"))
     username = db.Column(db.Text())
     password = db.Column(db.Text())
+
+    user = db.relationship("User", backref=db.backref("accounts", order_by="Account.username",
+                                                                  cascade="all,delete-orphan"))
 
 
 class Post(db.Model):
@@ -42,6 +47,6 @@ class Post(db.Model):
     post_at_timezone_offset = db.Column(db.Integer())
     posted_at = db.Column(db.DateTime(), nullable=True)
 
-    account = db.relationship("Account")
-    facebook_account = db.relationship("Account", backref=db.backref("posts", order_by="desc(Post.post_at)",
-                                                                     cascade="all, delete-orphan"))
+    account = db.relationship("Account", backref=db.backref("posts", order_by="desc(Post.post_at)",
+                                                                     cascade="all,delete-orphan",
+                                                                     lazy="dynamic"))

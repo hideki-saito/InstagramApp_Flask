@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+
+{% block access_control %}
+    <ul class="nav navbar-nav navbar-right">
+        <li>
+            <a href="{{ url_for('index') }}">Go to main site</a>
+        </li>
+        <li>
+            <a href="{{ url_for('security.logout') }}">Logout</a>
+        </li>
+    </ul>
+{% endblock %}

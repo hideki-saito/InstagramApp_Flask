@@ -1,14 +1,6 @@
-{% extends "base.html" %}
+{% extends "post/base.html" %}
 
 {% import "bootstrap/wtf.html" as wtf %}
-
-{% block navbar %}
-    <ul class="nav navbar-nav">
-        <li>
-            <a href="{{ url_for('create_post', account_id=account.id) }}">Add post</a>
-        </li>
-    </ul>
-{% endblock %}
 
 {% block container %}
     <ol class="breadcrumb">
@@ -17,13 +9,42 @@
     </ol>
 
     {% if account.posts %}
-        <h1>Posts</h1>
+        <h1>
+            {% if 'scheduled' in request.args %}
+                Scheduled posts
+            {% else %}
+                {% if 'posted' in request.args %}
+                    Posted posts
+                {% else %}
+                    Posts
+                {% endif %}
+            {% endif %}
+        </h1>
+
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                There was an error retrieving posts from your instagram account.
+                If this problem persists, please, check your password.
+            </div>
+        {% endif %}
 
         <div class="row">
-            {% for post in account.posts %}
-                <div class="col-xs-6 col-sm-4 col-md-3">
-                    {% if not post.posted_at %}<a href="{{ url_for('edit_post', id=post.id) }}" style="color: #000; text-decoration: none;">{% endif %}
-                        <img src="/static/uploads/{{ post.image }}" style="max-width: 100%;" />
+            {% for post in posts %}
+                <div class="col-xs-4" style="margin-bottom: 5px;">
+                    {% if post.posted_at %}
+                        {% if post.id %}
+                            <a href="/static/uploads/{{ post.image }}" title="{{ post.caption }}" class="js-fancybox" style="color: #000; text-decoration: none;">
+                        {% else %}
+                            <a href="{{ post.image }}" title="{{ post.caption }}" class="js-fancybox" style="color: #000; text-decoration: none;">
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('edit_post', id=post.id) }}" style="color: #000; text-decoration: none;">
+                    {% endif %}
+                        {% if post.id %}
+                            <img src="/static/uploads/{{ post.image }}" style="max-width: 100%;" />
+                        {% else %}
+                            <img src="{{ post.image }}" style="max-width: 100%;" />
+                        {% endif %}
                         <div style="font-size: 12px; margin-top: 3px;">
                             {% if post.posted_at %}
                                 <span class="glyphicon glyphicon-ok"></span>

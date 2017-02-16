@@ -4,7 +4,9 @@
 
 {% block content %}
     <div class="container">
-        <div style="margin: 30px auto; width: 320px;">
+        <div style="margin: 30px auto; width: 360px;">
+            <h1>Instagram Auto-post</h1>
+
             {% include "security/_messages.html" %}
 
             <form action="{{ url_for('security.login') }}" method="POST">

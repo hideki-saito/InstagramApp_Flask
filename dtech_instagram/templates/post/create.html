@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "post/base.html" %}
 
 {% import "bootstrap/wtf.html" as wtf %}
 
@@ -8,8 +8,8 @@
         <li class="active">{{ account.username }}</li>
     </ol>
 
-    <h1>Schedule post</h1>
-    <form action="{{ url_for('account_posts', id=account.id) }}" method="POST">
+    <h1>Schedule a post</h1>
+    <form action="{{ url_for('create_post', account_id=account.id) }}" method="POST">
         {% include "post/_form.html" %}
 
         <input class="btn btn-success" type="submit" value="Schedule post" />

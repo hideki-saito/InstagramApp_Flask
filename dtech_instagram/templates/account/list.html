@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 
 {% block container %}
-    <div style="margin-bottom: 15px;">
-        <a class="btn btn-primary" href="{{ url_for('create_account') }}">Add account</a>
-    </div>
+    {% if current_user.accounts|length < current_user.max_accounts %}
+        <div style="margin-bottom: 15px;">
+            <a class="btn btn-primary" href="{{ url_for('create_account') }}">Add account</a>
+        </div>
+    {% endif %}
 
     <table class="table table-striped">
-        {% for account in accounts %}
+        {% for account in current_user.accounts %}
             <tr>
                 <td style="width: 100%;">
                     <a href="{{ url_for('account_posts', id=account.id) }}">{{ account.username }}</a>

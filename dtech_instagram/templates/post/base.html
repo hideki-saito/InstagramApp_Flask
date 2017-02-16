@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+    <ul class="nav navbar-nav">
+        <li {% if request.endpoint == 'create_post' %}class="active"{% endif %}>
+            <a href="{{ url_for('create_post', account_id=account.id) }}">Schedule a post</a>
+        </li>
+        <li {% if request.endpoint == 'account_posts' and 'scheduled' in request.args %}class="active"{% endif %}>
+            <a href="{{ url_for('account_posts', id=account.id, scheduled=1) }}">Scheduled posts</a>
+        </li>
+        <li {% if request.endpoint == 'account_posts' and 'posted' in request.args %}class="active"{% endif %}>
+            <a href="{{ url_for('account_posts', id=account.id, posted=1) }}">Posted posts</a>
+        </li>
+    </ul>
+{% endblock %}
