@@ -1,0 +1,116 @@
+{% extends "bootstrap/base.html" %}
+
+{% block head %}
+    {{ super() }}
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="{{ url_for('static', filename='jquery.datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='sidebar.css') }}" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        #caption { height: 240px; }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="{{ url_for('accounts') }}">Manage accounts</a>
+                </li>
+                {% for a in accounts %}
+                    <li><a href="{{ url_for('account_posts', id=a.id) }}" style="{% if a == account %}color: #fff; font-weight: bold;{% endif %}">{{ a.username }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <nav class="navbar navbar-inverse" style="border-radius: 0; margin-bottom: 0;">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.email }} <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                {% block container %}{% endblock %}
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+
+    {% block scripts %}
+        {{ super() }}
+
+        <!-- Load widget code -->
+        <script type="text/javascript" src="http://feather.aviary.com/imaging/v3/editor.js"></script>
+        <script src="/static/js/vendor/jquery.ui.widget.js"></script>
+        <script src="/static/js/jquery.iframe-transport.js"></script>
+        <script src="/static/js/jquery.fileupload.js"></script>
+        <script src="/static/jquery.datetimepicker.full.min.js"></script>
+
+        <!-- Instantiate the widget -->
+        <script type="text/javascript">
+
+            $(function(){
+                var $img = $("#img");
+                var urlPrefix = document.location.toString().split("/").slice(0, 3).join("/") + "/static/uploads";
+                if ($("#image").val())
+                {
+                    $img.attr("src", urlPrefix + "/" + $("#image").val());
+                    $img.css("display", "block");
+                }
+
+                $("#upload").fileupload({
+                    done: function(e, data) {
+                        $("#upload").hide();
+
+                        var url = urlPrefix + "/" + data.result.image;
+
+                        $img.on("load", function() {
+                            $img.off("load");
+                            featherEditor = new Aviary.Feather({
+                                apiKey: "ea9b203912324c188e3697d98749755f",
+                                image: "img",
+                                cropPresetsStrict: true,
+                                forceCropPreset: ["Square", "1:1"],
+                                onSave: function(imageID, newURL) {
+                                    $("#url").val(newURL);
+                                    $img.attr("src", newURL);
+                                    featherEditor.close();
+                                }
+                            });
+                            featherEditor.launch({});
+                        });
+                        $img.attr("src", url);
+                        $img.css("display", "block");
+                    }
+                });
+
+                $("#post_at").datetimepicker();
+                $("#post_at_timezone_offset").val(new Date().getTimezoneOffset() * 60);
+
+                $(".js-datetime").each(function() {
+                    var d = new Date($(this).text());
+                    $(this).text(d.toLocaleString());
+                });
+            });
+
+        </script>
+    {% endblock %}
+{% endblock %}

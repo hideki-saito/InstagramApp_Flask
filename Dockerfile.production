@@ -1,0 +1,24 @@
+FROM ubuntu:16.04
+
+ADD Dockerfile-prepare.sh /Dockerfile-prepare.sh
+RUN bash /Dockerfile-prepare.sh
+RUN rm /Dockerfile-prepare.sh
+
+RUN python3 -m virtualenv --python=python3 /virtualenv
+
+RUN mkdir /dtech-instagram
+
+ADD requirements.txt /requirements.txt
+RUN /virtualenv/bin/pip install -r /requirements.txt
+
+RUN mkdir /dtech-instagram/dtech_instagram
+RUN touch /dtech-instagram/dtech_instagram/__init__.py
+ADD setup.py /dtech-instagram/setup.py
+
+WORKDIR /dtech-instagram
+RUN /virtualenv/bin/python setup.py develop
+
+RUN rm -rf /dtech-instagram/dtech_instagram
+ADD alembic /dtech-instagram/alembic
+ADD dtech_instagram /dtech-instagram/dtech_instagram
+ADD alembic.ini /dtech-instagram/alembic.ini

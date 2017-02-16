@@ -1,0 +1,10 @@
+<input id="upload" type="file" name="file" data-url="{{ url_for('upload') }}" style="margin-bottom: 15px;" />
+
+<img id="img" style="display: none; margin-bottom: 15px; max-width: 100%;" />
+
+{{ form.hidden_tag() }}
+
+{{ wtf.form_errors(form) }}
+
+{{ wtf.form_field(form.caption) }}
+{{ wtf.form_field(form.post_at) }}

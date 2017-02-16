@@ -1,0 +1,87 @@
+version: "2"
+
+services:
+  app:
+    links:
+      - postgres
+      - rabbitmq
+    volumes:
+      - /var/run/dtech_instagram
+      - uploads:/dtech-instagram/dtech_instagram/static/uploads
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        "max-size": "1m"
+        "max-file": "5"
+
+  worker:
+    command: /virtualenv/bin/celery worker -A dtech_instagram:celery -Q celery -l DEBUG --concurrency 1
+    environment:
+      C_FORCE_ROOT: "yes"
+    links:
+      - postgres
+      - rabbitmq
+    volumes_from:
+      - app
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        "max-size": "1m"
+        "max-file": "5"
+
+  scheduler:
+    command: /virtualenv/bin/celery beat -A dtech_instagram:celery -s /var/lib/scheduler/schedule --pidfile=
+    links:
+      - rabbitmq
+    volumes:
+      - scheduler-data:/var/lib/scheduler
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        "max-size": "1m"
+        "max-file": "5"
+
+  nginx:
+    links:
+      - app
+    volumes_from:
+      - app
+    ports:
+      - "80:80"
+    logging:
+      driver: "json-file"
+      options:
+        "max-size": "1m"
+        "max-file": "5"
+
+  postgres:
+    image: postgres:9.5.3
+    environment:
+      LC_ALL: C.UTF-8
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    logging:
+      driver: "json-file"
+      options:
+        "max-size": "1m"
+        "max-file": "5"
+
+  rabbitmq:
+    image: rabbitmq:3.6.3
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        "max-size": "1m"
+        "max-file": "5"
+
+volumes:
+  postgres-data:
+  rabbitmq-data:
+  scheduler-data:
+  uploads:

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+    <form action="{{ url_for('settings') }}" method="POST">
+        {{ form.hidden_tag() }}
+
+        {{ wtf.form_errors(form) }}
+
+        {{ wtf.form_field(form.password) }}
+        {{ wtf.form_field(form.password_confirm) }}
+
+        <input class="btn btn-primary" type="submit" value="{{ _('Save') }}" />
+    </form>
+{% endblock %}

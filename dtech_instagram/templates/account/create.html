@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block container %}
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('accounts') }}">Accounts</a></li>
+        <li class="active">Add</li>
+    </ol>
+
+    <form action="{{ url_for('create_account') }}" method="POST">
+        {{ form.hidden_tag() }}
+
+        {{ wtf.form_errors(form) }}
+
+        {{ wtf.form_field(form.username) }}
+        {{ wtf.form_field(form.password) }}
+
+        <input class="btn btn-success" type="submit" value="Add account" />
+    </form>
+{% endblock %}

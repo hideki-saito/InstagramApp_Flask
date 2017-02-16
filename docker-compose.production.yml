@@ -1,0 +1,17 @@
+version: "2"
+
+services:
+  app:
+    env_file: env.production
+    command: >
+      sh -cex "
+        cd /dtech-instagram;
+        /virtualenv/bin/alembic upgrade head;
+        /virtualenv/bin/uwsgi --master --module dtech_instagram:app --processes 5 --enable-threads --chmod-socket=666 --socket /var/run/dtech_instagram/uwsgi.socket;
+      "
+
+  worker:
+    env_file: env.production
+
+  scheduler:
+    env_file: env.production

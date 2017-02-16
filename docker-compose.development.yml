@@ -1,0 +1,45 @@
+version: "2"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    env_file: env.development
+    command: >
+      bash -cex "
+        export FLASK_APP=dtech_instagram
+        export FLASK_DEBUG=1
+        export LC_ALL=C.UTF-8
+        export LANG=C.UTF-8
+        exec /virtualenv/bin/flask run -h 0.0.0.0 -p 80
+      "
+    volumes:
+      - ./virtualenv:/virtualenv
+      - .:/dtech-instagram
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    env_file: env.development
+    volumes:
+      - ./virtualenv:/virtualenv
+      - .:/dtech-instagram
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.development
+    env_file: env.development
+    volumes:
+      - ./virtualenv:/virtualenv
+      - .:/dtech-instagram
+
+  nginx:
+    build: nginx
+    command: >
+      sh -cex "
+        sed -i.bak 's/uwsgi_pass  unix:\/var\/run\/dtech_instagram\/uwsgi\.socket/proxy_pass  http:\/\/app/g' /etc/nginx/nginx.conf;
+        nginx -g 'daemon off;';
+      "

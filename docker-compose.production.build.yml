@@ -1,0 +1,20 @@
+version: "2"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+
+  nginx:
+    build: nginx
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
