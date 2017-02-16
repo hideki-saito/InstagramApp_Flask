@@ -96,7 +96,7 @@
 
                 $("#upload").fileupload({
                     done: function(e, data) {
-                        $("#upload").hide();
+                        $("#upload").replaceWith('<div>Double-click image to open editor</div>');
 
                         var url = urlPrefix + "/" + data.result.image;
 
