@@ -35,7 +35,7 @@ class Account(db.Model):
 
 class Post(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
-    account_id = db.Column(db.Integer(), db.ForeignKey("account.id"))
+    account_id = db.Column(db.Integer(), db.ForeignKey("account.id", ondelete="CASCADE"))
     image = db.Column(db.Text())
     caption = db.Column(db.Text())
     post_at = db.Column(db.DateTime())

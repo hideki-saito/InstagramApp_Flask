@@ -53,3 +53,12 @@ def edit_account(id):
         return redirect(url_for("index"))
 
     return render_template("account/edit.html", account=account, form=form)
+
+
+@app.route("/accounts/<int:id>/delete", methods=("GET", "POST"))
+@login_required
+def delete_account(id):
+    account = db.session.query(Account).get(id)
+    db.session.delete(account)
+    db.session.commit()
+    return redirect(url_for("index"))
