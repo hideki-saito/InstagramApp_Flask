@@ -43,5 +43,5 @@ class Post(db.Model):
     posted_at = db.Column(db.DateTime(), nullable=True)
 
     account = db.relationship("Account")
-    facebook_account = db.relationship("Account", backref=db.backref("posts", order_by="desc(Post.post_at)"),
-                                       cascade="all, delete-orphan")
+    facebook_account = db.relationship("Account", backref=db.backref("posts", order_by="desc(Post.post_at)",
+                                                                     cascade="all, delete-orphan"))
