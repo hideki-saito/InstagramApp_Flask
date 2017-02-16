@@ -30,6 +30,7 @@ WORKDIR /
 
 RUN dpkg -i /usr/src/nginx_*.deb
 
+ADD ./cors /etc/nginx/cors
 ADD ./nginx.conf /etc/nginx/nginx.conf
 
 ADD ./www-root /www-root
