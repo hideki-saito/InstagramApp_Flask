@@ -1,0 +1,12 @@
+if ($request_method = "OPTIONS") {
+    add_header "Access-Control-Allow-Origin" "*" always;
+    add_header "Access-Control-Allow-Credentials" "true" always;
+    add_header "Access-Control-Allow-Methods" "DELETE, GET, PATCH, POST, PUT, OPTIONS" always;
+    add_header "Access-Control-Allow-Headers" "Accept,Authorization,Accept-Encoding,Accept-Language,Cache-Control,Connection,Content-Disposition,Content-Range,Content-Type,Content-Length,DNT,If-Modified-Since,Keep-Alive,Host,Origin,Pragma,Referer,Session-Id,User-Agent,X-CustomHeader,X-Requested-With" always;
+    return 204;
+}
+
+add_header "Access-Control-Allow-Origin" "*" always;
+add_header "Access-Control-Allow-Credentials" "true" always;
+add_header "Access-Control-Allow-Methods" "DELETE, GET, PATCH, POST, PUT, OPTIONS" always;
+add_header "Access-Control-Allow-Headers" "Accept,Authorization,Accept-Encoding,Accept-Language,Cache-Control,Connection,Content-Disposition,Content-Range,Content-Type,Content-Length,DNT,If-Modified-Since,Keep-Alive,Host,Origin,Pragma,Referer,Session-Id,User-Agent,X-CustomHeader,X-Requested-With" always;

@@ -87,8 +87,7 @@
                             featherEditor = new Aviary.Feather({
                                 apiKey: "ea9b203912324c188e3697d98749755f",
                                 image: "img",
-                                cropPresetsStrict: true,
-                                forceCropPreset: ["Square", "1:1"],
+                                enableCORS: true,
                                 onSave: function(imageID, newURL) {
                                     $("#url").val(newURL);
                                     $img.attr("src", newURL);
