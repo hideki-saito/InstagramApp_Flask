@@ -12,6 +12,7 @@ class Item(object):
     VIDEO = 2
 
     def __init__(self, item):
+        self.item = item
 
         self.taken_at = None
         self.pk = None

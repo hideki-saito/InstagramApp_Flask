@@ -81,7 +81,7 @@ def account_posts(id):
                     post = Post()
                     post.image = item.getImageVersions()[0].getUrl()
                     post.caption = item.getCaption().getText() if item.getCaption() else ""
-                    post.posted_at = datetime.fromtimestamp(item.getDeviceTimestamp())
+                    post.posted_at = datetime.fromtimestamp(item.item["taken_at"])
                     posts.append(post)
 
                 break
