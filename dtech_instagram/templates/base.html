@@ -58,7 +58,7 @@
         {{ super() }}
 
         <!-- Load widget code -->
-        <script type="text/javascript" src="http://feather.aviary.com/imaging/v3/editor.js"></script>
+        <script type="text/javascript" src="//feather.aviary.com/imaging/v3/editor.js"></script>
         <script src="/static/js/vendor/jquery.ui.widget.js"></script>
         <script src="/static/js/jquery.iframe-transport.js"></script>
         <script src="/static/js/jquery.fileupload.js"></script>
@@ -69,6 +69,21 @@
 
             $(function(){
                 var $img = $("#img");
+
+                $img.on("click", function() {
+                    var featherEditor = new Aviary.Feather({
+                        apiKey: "ea9b203912324c188e3697d98749755f",
+                        image: "img",
+                        enableCORS: true,
+                        onSave: function(imageID, newURL) {
+                            $("#url").val(newURL);
+                            $img.attr("src", newURL);
+                            featherEditor.close();
+                        }
+                    });
+                    featherEditor.launch({});
+                });
+
                 var urlPrefix = document.location.toString().split("/").slice(0, 3).join("/") + "/static/uploads";
                 if ($("#image").val())
                 {
@@ -82,22 +97,10 @@
 
                         var url = urlPrefix + "/" + data.result.image;
 
-                        $img.on("load", function() {
-                            $img.off("load");
-                            featherEditor = new Aviary.Feather({
-                                apiKey: "ea9b203912324c188e3697d98749755f",
-                                image: "img",
-                                enableCORS: true,
-                                onSave: function(imageID, newURL) {
-                                    $("#url").val(newURL);
-                                    $img.attr("src", newURL);
-                                    featherEditor.close();
-                                }
-                            });
-                            featherEditor.launch({});
-                        });
                         $img.attr("src", url);
                         $img.css("display", "block");
+
+                        $("#url").val(url);
                     }
                 });
 
