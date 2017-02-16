@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block navbar %}
+    <ul class="nav navbar-nav">
+        <li>
+            <a href="{{ url_for('create_post', account_id=account.id) }}">Add post</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block container %}
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('accounts') }}">Accounts</a></li>
+        <li class="active">{{ account.username }}</li>
+    </ol>
+
+    {% if account.posts %}
+        <h1>Posts</h1>
+
+        <div class="row">
+            {% for post in account.posts %}
+                <div class="col-xs-6 col-sm-4 col-md-3">
+                    {% if not post.posted_at %}<a href="{{ url_for('edit_post', id=post.id) }}" style="color: #000; text-decoration: none;">{% endif %}
+                        <img src="/static/uploads/{{ post.image }}" style="max-width: 100%;" />
+                        <div style="font-size: 12px; margin-top: 3px;">
+                            {% if post.posted_at %}
+                                <span class="glyphicon glyphicon-ok"></span>
+                                {{ post.posted_at.strftime("%Y/%m/%d %I:%M %p") }}
+                            {% else %}
+                                <span class="glyphicon glyphicon-time"></span>
+                                {{ post.post_at.strftime("%Y/%m/%d %I:%M %p") }}
+                            {% endif %}
+                        </div>
+                    {% if not post.posted_at %}</a>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}

@@ -16,7 +16,7 @@ class PostForm(FlaskForm):
     url = fields.HiddenField("URL")
     image = fields.HiddenField("Image")
     caption = fields.TextAreaField("Caption")
-    post_at = fields.DateTimeField("Post at", format='%Y/%m/%d %H:%M', validators=[validators.DataRequired()])
+    post_at = fields.DateTimeField("Post at", format='%Y/%m/%d %I:%M %p', validators=[validators.DataRequired()])
     post_at_timezone_offset = fields.IntegerField("Timezone offset", validators=[validators.DataRequired()],
                                                   widget=widgets.HiddenInput())
 
@@ -57,6 +57,13 @@ def upload():
 @login_required
 def account_posts(id):
     account = db.session.query(Account).get(id)
+    return render_template("post/list.html", account=account)
+
+
+@app.route("/accounts/<int:account_id>/posts/create", methods=("GET", "POST"))
+@login_required
+def create_post(account_id):
+    account = db.session.query(Account).get(account_id)
     form = PostForm()
     if form.validate_on_submit():
         post = Post()

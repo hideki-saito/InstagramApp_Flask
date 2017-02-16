@@ -31,6 +31,9 @@
         <nav class="navbar navbar-inverse" style="border-radius: 0; margin-bottom: 0;">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    {% block navbar %}
+                    {% endblock %}
+
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.email }} <span class="caret"></span></a>
@@ -104,7 +107,10 @@
                     }
                 });
 
-                $("#post_at").datetimepicker();
+                $("#post_at").datetimepicker({
+                    format: "Y/m/d g:i A",
+                    formatTime: "g:i A"
+                });
                 $("#post_at_timezone_offset").val(new Date().getTimezoneOffset() * 60);
 
                 $(".js-datetime").each(function() {
