@@ -6,12 +6,23 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
 
     <link href="{{ url_for('static', filename='jquery.datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='sandstone.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url_for('static', filename='sidebar.css') }}" rel="stylesheet" type="text/css" />
+
+    <link href="{{ url_for('static', filename='emoji-picker-gh-pages/lib/css/nanoscroller.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='emoji-picker-gh-pages/lib/css/emoji.css') }}" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
 
     <style type="text/css">
+        .caption-textarea .form-group { position: relative; }
         #caption { height: 240px; }
+        .emoji-wysiwyg-editor { height: 240px; }
+        .emoji-picker-icon { cursor: pointer; top: 30px; background: url(/static/emoji-picker-gh-pages/lib//img/IconsetSmiles.png) no-repeat; background-position: -9px -34px; background-size: 42px 350px; width: 24px; height: 29px; }
+        .emoji-menu { left: -190px !important; top: 5px !important; }
+
+        .post-image-container { overflow: hidden; }
+        .post-image-container.ui-draggable-dragging { z-index: 1000; }
     </style>
 {% endblock %}
 
@@ -30,7 +41,7 @@
         </div>
         <!-- /#sidebar-wrapper -->
 
-        <nav class="navbar navbar-inverse" style="border-radius: 0; margin-bottom: 0;">
+        <nav class="navbar navbar-default" style="border-radius: 0; margin-bottom: 0;">
             <div class="container-fluid">
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     {% block navbar %}
@@ -65,6 +76,8 @@
     {% block scripts %}
         {{ super() }}
 
+        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
         <!-- Load widget code -->
         <script type="text/javascript" src="//feather.aviary.com/imaging/v3/editor.js"></script>
         <script src="/static/js/vendor/jquery.ui.widget.js"></script>
@@ -74,9 +87,15 @@
 
         <script type="text/javascript" src="/static/js/fancybox/jquery.fancybox.pack.js"></script>
 
+        <script src="/static/emoji-picker-gh-pages/lib/js/nanoscroller.min.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/tether.min.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/config.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/util.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/jquery.emojiarea.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/emoji-picker.js"></script>
+
         <!-- Instantiate the widget -->
         <script type="text/javascript">
-
             $(function(){
                 var $img = $("#img");
 
@@ -125,7 +144,67 @@
                     $(this).text(d.toLocaleString());
                 });
 
-                $(".js-fancybox").fancybox({});
+                $(".js-fancybox").fancybox({
+                    afterLoad: function(box) {
+                        var editHref = box.element.data("editHref");
+                        if (editHref)
+                        {
+                            var interval = setInterval(function() {
+                                var $close = $(".fancybox-close");
+                                if ($close.length)
+                                {
+                                    $close.after(
+                                        $("<a/>").
+                                            attr("href", editHref).
+                                            text("Edit").
+                                            addClass("btn btn-info btn-lg").
+                                            css("display", "block").
+                                            css("position", "absolute").
+                                            css("top", $('.fancybox-skin').height() / 2 - 33).
+                                            css("right", -90)
+                                    );
+                                    clearInterval(interval);
+                                }
+                            }, 0);
+                        }
+                    }
+                });
+
+                // Initializes and creates emoji set from sprite sheet
+                window.emojiPicker = new EmojiPicker({
+                    emojiable_selector: '[data-emojiable=true]',
+                    assetsPath: '/static/emoji-picker-gh-pages/lib/img/',
+                    popupButtonClasses: ''
+                });
+                // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+                // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+                // It can be called as many times as necessary; previously converted input fields will not be converted again
+                window.emojiPicker.discover();
+
+                function resizePosts() {
+                    var w = $(".post-image-container").width();
+                    $(".post-image-container div").each(function() {
+                        $(this).css("width", w);
+                        $(this).css("height", w);
+                    });
+                }
+                window.onresize = resizePosts;
+                resizePosts();
+
+                $(".post-image-drag-and-drop").draggable({
+                    revert: "invalid"
+                });
+                $(".post-image-drag-and-drop").droppable({
+                    "accept": ".post-image-drag-and-drop",
+                    drop: function(event, ui) {
+                        $.post("/swap-posts", {
+                            "id_1": $(this).data("id"),
+                            "id_2": ui.draggable.data("id")
+                        }).then(function(){
+                            document.location.reload();
+                        });
+                    }
+                });
             });
 
         </script>

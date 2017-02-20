@@ -31,20 +31,12 @@
         <div class="row">
             {% for post in posts %}
                 <div class="col-xs-4" style="margin-bottom: 5px;">
-                    {% if post.posted_at %}
-                        {% if post.id %}
-                            <a href="/static/uploads/{{ post.image }}" title="{{ post.caption }}" class="js-fancybox" style="color: #000; text-decoration: none;">
-                        {% else %}
-                            <a href="{{ post.image }}" title="{{ post.caption }}" class="js-fancybox" style="color: #000; text-decoration: none;">
-                        {% endif %}
+                    {% if post.id %}
+                        <a href="/static/uploads/{{ post.image }}" title="{{ post.caption }}" class="js-fancybox" style="color: #000; text-decoration: none;" data-edit-href="{{ url_for('edit_post', id=post.id) }}">
                     {% else %}
-                        <a href="{{ url_for('edit_post', id=post.id) }}" style="color: #000; text-decoration: none;">
+                        <a href="{{ post.image }}" title="{{ post.caption }}" class="js-fancybox" style="color: #000; text-decoration: none;">
                     {% endif %}
-                        {% if post.id %}
-                            <img src="/static/uploads/{{ post.image }}" style="max-width: 100%;" />
-                        {% else %}
-                            <img src="{{ post.image }}" style="max-width: 100%;" />
-                        {% endif %}
+                        <div class="post-image-container {% if post.id and not post.posted_at %}post-image-drag-and-drop{% endif %}" data-id="{{ post.id }}" style="width: 100%;"><div class="post-image" style="background: url({% if post.id %}/static/uploads/{{ post.image }}{% else %}{{ post.image }}{% endif %}) 50% 50% no-repeat; background-size: cover;"></div></div>
                         <div style="font-size: 12px; margin-top: 3px;">
                             {% if post.posted_at %}
                                 <span class="glyphicon glyphicon-ok"></span>

@@ -6,5 +6,5 @@
 
 {{ wtf.form_errors(form) }}
 
-{{ wtf.form_field(form.caption) }}
+<div class="caption-textarea">{{ wtf.form_field(form.caption, **{"data-emojiable": "true"}) }}</div>
 {{ wtf.form_field(form.post_at) }}

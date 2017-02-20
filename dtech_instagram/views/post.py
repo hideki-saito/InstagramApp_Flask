@@ -144,3 +144,21 @@ def edit_post(id):
             return redirect(url_for("account_posts", id=post.account.id))
 
         return render_template("post/edit.html", account=post.account, post=post, form=form)
+
+
+@app.route("/swap-posts", methods=("POST",))
+@login_required
+def swap_posts():
+    post_1 = db.session.query(Post).get(request.form["id_1"])
+    if post_1.account.user != current_user:
+        raise Forbidden()
+
+    post_2 = db.session.query(Post).get(request.form["id_2"])
+    if post_2.account.user != current_user:
+        raise Forbidden()
+
+    post_1.image, post_2.image = post_2.image, post_1.image
+    post_1.caption, post_2.caption = post_2.caption, post_1.caption
+    db.session.commit()
+
+    return jsonify({})

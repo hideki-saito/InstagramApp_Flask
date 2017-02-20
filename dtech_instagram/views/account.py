@@ -63,7 +63,7 @@ def edit_account(id):
     return render_template("account/edit.html", account=account, form=form)
 
 
-@app.route("/accounts/<int:id>/delete", methods=("GET", "POST"))
+@app.route("/accounts/<int:id>/delete", methods=("POST",))
 @login_required
 def delete_account(id):
     account = db.session.query(Account).get(id)
