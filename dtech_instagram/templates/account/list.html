@@ -11,7 +11,7 @@
         {% for account in current_user.accounts %}
             <tr>
                 <td style="width: 100%;">
-                    <a href="{{ url_for('account_posts', id=account.id) }}">{{ account.username }}</a>
+                    <a href="{{ url_for('dashboard', account_id=account.id) }}">{{ account.username }}</a>
                 </td>
                 <td style="white-space: nowrap;">
                     <form action="{{ url_for('delete_account', id=account.id) }}" method="post">

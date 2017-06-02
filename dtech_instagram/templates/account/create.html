@@ -8,6 +8,12 @@
         <li class="active">Add</li>
     </ol>
 
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            The password you entered is incorrect. Please try again.
+        </div>
+    {% endif %}
+
     <form action="{{ url_for('create_account') }}" method="POST">
         {{ form.hidden_tag() }}
 

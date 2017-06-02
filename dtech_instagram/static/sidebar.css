@@ -23,7 +23,7 @@
 }
 
 #sidebar-wrapper {
-    z-index: 1000;
+    z-index: 900;
     position: fixed;
     left: 250px;
     width: 0;
@@ -103,6 +103,7 @@
 /* @media(min-width:768px) { */
     #wrapper {
         padding-left: 250px;
+        height: 100%;
     }
 
     #wrapper.toggled {
@@ -127,3 +128,5 @@
         margin-right: 0;
     }
 /* } */
+
+

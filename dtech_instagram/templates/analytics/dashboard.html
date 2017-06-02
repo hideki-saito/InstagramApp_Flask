@@ -1,0 +1,293 @@
+{% extends "analytics/analytic_base.html" %}
+
+{% block analytic_content %}
+    <section id="main-content">
+        <section class="wrapper">
+            <div class="row base-padding">
+                <div class="col-lg-12">
+                    <div class="row dashboard-row primary-dashboard-section">
+                        <div class=" col-sm-2 col-sm-offset-1 ">
+                            <div class="dashboard-data">
+                                <i class="fa fa-arrow-right"></i><span class="li_user"></span>
+                                <div>
+                                    <span class="dashboard-statistics">{{ now_info.followers_count }}</span>
+                                    <sup><span
+                                        {% if difference_info.followers_count >= 0 %}
+                                            class="dashboard-stats-delta  color-positive "
+                                        {% else %}
+                                            class="dashboard-stats-delta  color-negative "
+                                        {% endif %}
+                                        data-toggle="tooltip" data-placement="right"
+                                        title="Change in the last 30 days">
+                                        <i {% if difference_info.followers_count >= 0 %} class="fa fa-caret-up" {% else %} class="fa fa-caret-down" {% endif %}
+                                        aria-hidden="true"></i>{{ difference_info.followers_count|abs }}</span></sup>
+                                </div>
+                            </div>
+                            <p class="dashboard-support">Followers</p>
+                        </div>
+
+                        <div class=" col-sm-2 ">
+                            <div class="dashboard-data">
+                                <span class="li_user"></span><i class="fa fa-arrow-right"></i>
+                                <div>
+                                    <span class="dashboard-statistics">{{ now_info.followings_count }}</span>
+                                    <sup><span
+                                        {% if difference_info.followings_count >= 0 %}
+                                            class="dashboard-stats-delta  color-positive "
+                                        {% else %}
+                                            class="dashboard-stats-delta  color-negative "
+                                        {% endif %}
+                                        data-toggle="tooltip" data-placement="right"
+                                        title="Change in the last 30 days">
+                                        <i {% if difference_info.followings_count >= 0 %} class="fa fa-caret-up" {% else %} class="fa fa-caret-down" {% endif %}
+                                        class="fa fa-caret-down"
+                                        aria-hidden="true"></i>{{ difference_info.followings_count }}
+                                    </span></sup>
+                                </div>
+                            </div>
+                            <p class="dashboard-support">Following</p>
+                        </div>
+
+                        <div class=" col-sm-2 ">
+                            <div class="dashboard-data">
+                                <span class="li_photo"></span>
+                                <div>
+                                    <span class="dashboard-statistics">{{ now_info.posts_count }}</span>
+                                    <sup><span
+                                        {% if difference_info.posts_count >= 0 %}
+                                            class="dashboard-stats-delta  color-positive "
+                                        {% else %}
+                                            class="dashboard-stats-delta  color-negative "
+                                        {% endif %}
+                                        data-toggle="tooltip" data-placement="right"
+                                        title="Change in the last 30 days">
+                                        <i {% if difference_info.posts_count >= 0 %} class="fa fa-caret-up" {% else %} class="fa fa-caret-down" {% endif %}
+                                        class="fa fa-caret-up"
+                                        aria-hidden="true"></i>{{ difference_info.posts_count }}
+                                    </span></sup>
+                                </div>
+                            </div>
+                            <p class="dashboard-support">Lifetime Posts</p>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="dashboard-data">
+                                <span class="li_heart"></span>
+                                <div>
+                                    <span class="dashboard-statistics">{{ now_info.likes_count }}</span>
+                                    <sup><span
+                                        {% if difference_info.likes_count >= 0 %}
+                                            class="dashboard-stats-delta  color-positive "
+                                        {% else %}
+                                            class="dashboard-stats-delta  color-negative "
+                                        {% endif %}
+                                        data-toggle="tooltip" data-placement="right"
+                                        title="Change in the last 30 days">
+                                        <i {% if difference_info.likes_count >= 0 %} class="fa fa-caret-up" {% else %} class="fa fa-caret-down" {% endif %}
+                                        class="fa fa-caret-up"
+                                        aria-hidden="true"></i>{{ difference_info.likes_count }}
+                                    </span></sup>
+                                </div>
+                            </div>
+                            <p class="dashboard-support">Lifetime Likes</p>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="dashboard-data">
+                                <span class="li_bubble"></span>
+                                <div>
+                                    <span class="dashboard-statistics">{{ now_info.comments_count }}</span>
+                                    <sup><span
+                                        {% if difference_info.comments_count >= 0 %}
+                                            class="dashboard-stats-delta  color-positive "
+                                        {% else %}
+                                            class="dashboard-stats-delta  color-negative "
+                                        {% endif %}
+                                        data-toggle="tooltip" data-placement="right"
+                                        title="Change in the last 30 days">
+                                        <i {% if difference_info.comments_count >= 0 %} class="fa fa-caret-up" {% else %} class="fa fa-caret-down" {% endif %}
+                                        class="fa fa-caret-up"
+                                        aria-hidden="true"></i>{{ difference_info.comments_count }}
+                                    </span></sup>
+                                </div>
+                            </div>
+                            <p class="dashboard-support">Lifetime Comments</p>
+                        </div>
+                    </div>
+
+                <div class="dashboard-row hidden-dashboard-table">
+                    <table class="table">
+                        <caption class="dashboard-heading">Overview</caption>
+                        <tbody>
+
+                            <tr>
+                                <td>Followers</td>
+                                <td>465</td>
+                                <td data-toggle="tooltip" data-placement="left" title="Change in the last 30 days"
+                                    class=" table-stats-delta  color-positive">
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i> 17
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Following</td>
+                                <td>878</td>
+                                <td data-toggle="tooltip" data-placement="left" title="Change in the last 30 days"
+                                    class=" table-stats-delta  color-negative">
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i> -11
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Lifetime Posts</td>
+                                <td>7</td>
+                                <td data-toggle="tooltip" data-placement="left" title="Change in the last 30 days"
+                                    class=" table-stats-delta  color-positive">
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i> 7
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td>Lifetime Likes</td>
+                                <td>363</td>
+                                    <td data-toggle="tooltip" data-placement="left" title="Change in the last 30 days"
+                                        class=" table-stats-delta  color-positive">
+                                            <i class="fa fa-caret-up" aria-hidden="true"></i> 363
+                                    </td>
+                            </tr>
+
+                            <tr>
+                                <td>Lifetime Comments</td>
+                                <td>8</td>
+                                <td data-toggle="tooltip" data-placement="left" title="Change in the last 30 days"
+                                    class=" table-stats-delta  color-positive">
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i> 8
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4">
+                        <p class="dashboard-heading">Most Recent Posts</p>
+                    </div>
+                </div>
+                <div class="row dashboard-row">
+                    <div class="col-sm-4">
+                        <div class="dashboard-chart" id="likes-chart" ></div>
+                        <div class="dashboard-chart-stats">
+                            <span class="dashboard-statistics dashboard-chart-data">{{ recent_info.avarage_likes_count }}</span>
+                            <span class="dashboard-support">Average Likes</span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="dashboard-chart" id="comments-chart"></div>
+                        <div class="dashboard-chart-stats">
+                            <span class="dashboard-statistics dashboard-chart-data">{{ recent_info.average_comments_count }}</span>
+                            <span class="dashboard-support">Average Comments</span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="dashboard-chart" id="engagement-chart" data-chart-data="[{&quot;value&quot;: 17.633928571428573, &quot;label&quot;: &quot;&quot;, &quot;img_url&quot;: &quot;https://scontent.cdninstagram.com/t51.2885-15/s150x150/e35/c180.0.720.720/18095363_1963670103867444_4267631091881345024_n.jpg&quot;}, {&quot;value&quot;: 16.517857142857142, &quot;label&quot;: &quot;&quot;, &quot;img_url&quot;: &quot;https://scontent.cdninstagram.com/t51.2885-15/s150x150/e35/c180.0.720.720/18160633_1407609302595090_6825072044049170432_n.jpg&quot;}, {&quot;value&quot;: 16.294642857142858, &quot;label&quot;: &quot;&quot;, &quot;img_url&quot;: &quot;https://scontent.cdninstagram.com/t51.2885-15/s150x150/e35/c150.0.779.779/18160737_1763948783935643_3913738113247084544_n.jpg&quot;}, {&quot;value&quot;: 11.607142857142858, &quot;label&quot;: &quot;&quot;, &quot;img_url&quot;: &quot;https://scontent.cdninstagram.com/t51.2885-15/s150x150/e35/c9.0.1061.1061/18251565_1886999818237610_3252686266356989952_n.jpg&quot;}, {&quot;value&quot;: 10.9375, &quot;label&quot;: &quot;&quot;, &quot;img_url&quot;: &quot;https://scontent.cdninstagram.com/t51.2885-15/s150x150/e35/c184.0.711.711/18160839_1847962418804219_5039890224864296960_n.jpg&quot;}, {&quot;value&quot;: 8.705357142857142, &quot;label&quot;: &quot;&quot;, &quot;img_url&quot;: &quot;https://scontent.cdninstagram.com/t51.2885-15/s150x150/e35/18161381_286184898502443_7772886449132666880_n.jpg&quot;}, {&quot;value&quot;: 1.0752688172043012, &quot;label&quot;: &quot;&quot;, &quot;img_url&quot;: &quot;https://scontent.cdninstagram.com/t51.2885-15/s150x150/e35/c180.0.720.720/18251874_1875826026017122_7852650296831377408_n.jpg&quot;}]"></div>
+                        <div class="dashboard-chart-stats">
+                            <span class="dashboard-statistics dashboard-chart-data">11.8<span class="dashboard-percent">%</span></span>
+                            <span class="dashboard-support">Engagement
+                                <i class="fa fa-question-circle data-tooltip" aria-hidden="true" data-toggle="tooltip"
+                                   data-placement="bottom"
+                                   data-html="true" data-title="Likes + Comments&lt;hr&gt;  Followers"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                    <!-- /row mt -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="dashboard-heading">Top Liked Posts <span class="pull-right"><a href="/media/?sort=likes#media">View More</a></span></p>
+                    </div>
+                </div>
+
+                <div class="row dashboard-row">
+                    {% for post in top_liked_posts %}
+                        <div class="col-xs-12 col-sm-4 col-lg-4 add-mb">
+                            <div class="instagram-panel">
+                                <a href class="dashboard-modal" data-toggle="modal" data-target="#myModal"
+                                   data-img="{{ post.pic_url }}" data-link="https://www.instagram.com/p/{{ post.code }}/">
+                                    <img class="dashboard-img" src="{{ post.pic_url }}"
+                                         onerror="this.src=''">
+                                </a>
+                            </div>
+                            <div class="panel-stats">
+                                <span>
+                                    <i class="fa fa-heart"></i> {{ post.likes_count }} |
+                                    <i class="fa fa-comment"></i> {{ post.comments_count }}
+                                </span>
+                                <span class="pull-right">{{ post.taken_at.strftime("%B %d, %Y") }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="dashboard-heading">Top Commented Posts <span class="pull-right"><a href="/media/?sort=comments#media">View More</a></span></p>
+                    </div>
+                </div>
+
+                <div class="row dashboard-row">
+                    {% for post in top_commented_posts %}
+                        <div class="col-xs-12 col-sm-4 col-lg-4 add-mb">
+                            <div class="instagram-panel">
+                                <a href class="dashboard-modal" data-toggle="modal" data-target="#myModal"
+                                   data-img="{{ post.pic_url }}" data-link="https://www.instagram.com/p/{{ post.code }}/">
+                                    <img class="dashboard-img" src="{{ post.pic_url }}"
+                                         onerror="this.src=''">
+                                </a>
+                            </div>
+                            <div class="panel-stats">
+                                <span>
+                                    <i class="fa fa-heart"></i> {{ post.likes_count }} |
+                                    <i class="fa fa-comment"></i> {{ post.comments_count }}
+                                </span>
+                                <span class="pull-right">{{ post.taken_at.strftime("%B %d, %Y") }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            </div>
+        </section>
+
+        <!-- Request Email Modal -->
+
+        <!-- /col-lg-12 END SECTION MIDDLE -->
+        <!-- Google Code for Signup Conversion Page -->
+        <script type="text/javascript">
+            /* <![CDATA[ */
+            var google_conversion_id = 862701267;
+            var google_conversion_language = "en";
+            var google_conversion_format = "3";
+            var google_conversion_color = "ffffff";
+            var google_conversion_label = "rmuTCJ2k5G4Q042vmwM";
+            var google_remarketing_only = false;
+            /* ]]> */
+        </script>
+
+        <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+        </script>
+        <noscript>
+            <div style="display:inline;">
+                <img height="1" width="1" style="border-style:none;" alt=""
+                     src="//www.googleadservices.com/pagead/conversion/862701267/?label=rmuTCJ2k5G4Q042vmwM&amp;guid=ON&amp;script=0"/>
+            </div>
+        </noscript>
+
+
+    </section>
+
+        <!-- Modal -->
+
+{% endblock %}

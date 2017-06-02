@@ -13,6 +13,11 @@
     <link href="{{ url_for('static', filename='emoji-picker-gh-pages/lib/css/emoji.css') }}" rel="stylesheet" type="text/css" />
 
     <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/drag-drop/styles.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/style.css" type="text/css" media="screen" />
+
+    {% block extend_css %}
+    {% endblock %}
 
     <style type="text/css">
         .caption-textarea .form-group { position: relative; }
@@ -35,48 +40,50 @@
                     <a href="{{ url_for('accounts') }}">Manage accounts</a>
                 </li>
                 {% for a in current_user.accounts %}
-                    <li><a href="{{ url_for('account_posts', id=a.id) }}" style="{% if a == account %}color: #fff; font-weight: bold;{% endif %}">{{ a.username }}</a></li>
+                    <li><a href="{{ url_for('dashboard', account_id=a.id) }}" style="{% if a == account %}color: #fff; font-weight: bold;{% endif %}">{{ a.username }}</a></li>
                 {% endfor %}
             </ul>
         </div>
-        <!-- /#sidebar-wrapper -->
+                <nav class="navbar navbar-default custom-navbar">
+                    <div class="container-fluid">
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                            {% block navbar %}
+                            {% endblock %}
 
-        <nav class="navbar navbar-default" style="border-radius: 0; margin-bottom: 0;">
-            <div class="container-fluid">
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    {% block navbar %}
-                    {% endblock %}
-
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.email }} <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                {% if current_user.id == 1 %}
-                                    <li><a href="{{ url_for('admin.index') }}">Admin</a></li>
-                                {% endif %}
-                                <li><a href="{{ url_for('settings') }}">Settings</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.email }} <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        {% if current_user.id == 1 %}
+                                            <li><a href="{{ url_for('admin.index') }}">Admin</a></li>
+                                        {% endif %}
+                                        <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
+                                    </ul>
+                                </li>
                             </ul>
-                        </li>
-                    </ul>
-                </div><!-- /.navbar-collapse -->
-            </div><!-- /.container-fluid -->
-        </nav>
+                        </div><!-- /.navbar-collapse -->
+                    </div><!-- /.container-fluid -->
+                </nav>
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                {% block container %}{% endblock %}
-            </div>
-        </div>
-        <!-- /#page-content-wrapper -->
+                <!-- Page Content -->
+                <div id="page-content-wrapper">
+                    <div class="container-fluid creat-post-form">
+                        {% block container %}{% endblock %}
+                    </div>
+                </div>
+                <!-- /#page-content-wrapper -->
+        <div>
     </div>
 
     {% block scripts %}
         {{ super() }}
+        <script type=text/javascript>
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        </script>
 
-        <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+            <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
         <!-- Load widget code -->
         <script type="text/javascript" src="//feather.aviary.com/imaging/v3/editor.js"></script>
@@ -93,6 +100,9 @@
         <script src="/static/emoji-picker-gh-pages/lib/js/util.js"></script>
         <script src="/static/emoji-picker-gh-pages/lib/js/jquery.emojiarea.js"></script>
         <script src="/static/emoji-picker-gh-pages/lib/js/emoji-picker.js"></script>
+        <script src="/static/drag-drop/scripts.js"></script>
+        {% block extend_script %}
+        {% endblock %}
 
         <!-- Instantiate the widget -->
         <script type="text/javascript">

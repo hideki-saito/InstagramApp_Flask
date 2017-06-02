@@ -1,0 +1,248 @@
+{% extends "bootstrap/base.html" %}
+
+{% block head %}
+    {{ super() }}
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.9/css/bootstrap-dialog.min.css" rel="stylesheet" type="text/css" />
+
+    <link href="{{ url_for('static', filename='jquery.datetimepicker.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='sandstone.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='sidebar.css') }}?1" rel="stylesheet" type="text/css" />
+
+    <link href="{{ url_for('static', filename='emoji-picker-gh-pages/lib/css/nanoscroller.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='emoji-picker-gh-pages/lib/css/emoji.css') }}" rel="stylesheet" type="text/css" />
+
+    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/drag-drop/styles.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/style.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/croppie/croppie.css" />
+
+    {% block extend_css %}
+    {% endblock %}
+
+    <style type="text/css">
+        .caption-textarea .form-group { position: relative; }
+        #caption { height: 240px; }
+        .emoji-wysiwyg-editor { height: 240px; }
+        .emoji-picker-icon { cursor: pointer; top: 30px; background: url(/static/emoji-picker-gh-pages/lib//img/IconsetSmiles.png) no-repeat; background-position: -9px -34px; background-size: 42px 350px; width: 24px; height: 29px; }
+        .emoji-menu { left: -190px !important; top: 5px !important; }
+
+        .post-image-container { overflow: hidden; }
+        .post-image-container.ui-draggable-dragging { z-index: 1000; }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="{{ url_for('accounts') }}">Manage accounts</a>
+                </li>
+                {% for a in current_user.accounts %}
+                    <li><a href="{{ url_for('dashboard', account_id=a.id) }}" style="{% if a == account %}color: #fff; font-weight: bold;{% endif %}">{{ a.username }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% block drag_drop %}
+        {% endblock %}
+            <!-- /#sidebar-wrapper -->
+        <div class="create-post">
+            <nav class="navbar navbar-default custom-navbar">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        {% block navbar %}
+                        {% endblock %}
+
+                        <ul class="nav navbar-nav navbar-right fixed-parent-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ current_user.email }} <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    {% if current_user.id == 1 %}
+                                        <li><a href="{{ url_for('admin.index') }}">Admin</a></li>
+                                    {% endif %}
+                                    <li><a href="{{ url_for('settings') }}">Settings</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="{{ url_for('security.logout') }}">Logout</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
+
+            <!-- Page Content -->
+            <div id="page-content-wrapper">
+                <div class="container-fluid creat-post-form">
+                    {% block container %}{% endblock %}
+                </div>
+            </div>
+        </div>    <!-- /#page-content-wrapper -->
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal" method="get">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label draggable="true" ondragstart="window.imageManager.drag(event)" ondrop="window.imageManager.drop(event)" ondragover="window.imageManager.allowDrop(event)" for="folderName" class="control-label col-xs-4">Name:</label>
+                            <div class="input-group col-xs-7">
+                                <input type="text" name="folderName" id="folderName" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button class="btn btn-default" type="button" onclick="modal.close();">Cancel</button>
+                        <button class="btn btn-primary" type="submit" onclick="modal.ourExtensions.saveFolderName(event);">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {% block scripts %}
+        {{ super() }}
+        <script type=text/javascript>
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        </script>
+
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+
+        <!-- Load widget code -->
+        <script type="text/javascript" src="//feather.aviary.com/imaging/v3/editor.js"></script>
+        <script src="/static/js/vendor/jquery.ui.widget.js"></script>
+        <script src="/static/js/jquery.iframe-transport.js"></script>
+        <script src="/static/js/jquery.fileupload.js"></script>
+        <script src="/static/jquery.datetimepicker.full.min.js"></script>
+
+        <script type="text/javascript" src="/static/js/fancybox/jquery.fancybox.pack.js"></script>
+
+        <script src="/static/emoji-picker-gh-pages/lib/js/nanoscroller.min.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/tether.min.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/config.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/util.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/jquery.emojiarea.js"></script>
+        <script src="/static/emoji-picker-gh-pages/lib/js/emoji-picker.js"></script>
+        <script src="/static/drag-drop/scripts.js"></script>
+        <script src="/static/croppie/croppie.js"></script>
+        <script src="/static/js/utility.js"></script>
+        {% block extend_js %}
+        {% endblock %}
+
+        <!-- Instantiate the widget -->
+        <script type="text/javascript">
+            $(function(){
+                var $img = $("#img");
+
+                $("#feather_editor").click(function() {
+                    var featherEditor = new Aviary.Feather({
+                        apiKey: "ea9b203912324c188e3697d98749755f",
+                        image: "img",
+                        enableCORS: true,
+                        onSave: function(imageID, newURL) {
+                            image_deletion();
+                            place_image(newURL);
+                            featherEditor.close();
+                        }
+                    });
+                    featherEditor.launch({});
+                });
+
+                urlPrefix = document.location.toString().split("/").slice(0, 3).join("/") + "/static/uploads";
+                if ($("#image").val())
+                {
+                    $img.attr("src", urlPrefix + "/" + $("#image").val());
+                    $img.css("display", "block");
+                }
+
+                $("#upload").fileupload({
+                    done: function(e, data) {
+                        image_deletion();
+
+                        var url = urlPrefix + "/" + data.result.image;
+                        place_image(url);
+                    }
+                });
+                $('#datetimepicker').datetimepicker();
+
+//                $("#post_at").datetimepicker({
+//                    format: "Y/m/d g:i A",
+//                    formatTime: "g:i A"
+//                });
+                $("#post_at_timezone_offset").val(new Date().getTimezoneOffset() * 60);
+
+                $(".js-datetime").each(function() {
+                    var d = new Date($(this).text());
+                    $(this).text(d.toLocaleString());
+                });
+
+                $(".js-fancybox").fancybox({
+                    afterLoad: function(box) {
+                        var editHref = box.element.data("editHref");
+                        if (editHref)
+                        {
+                            var interval = setInterval(function() {
+                                var $close = $(".fancybox-close");
+                                if ($close.length)
+                                {
+                                    $close.after(
+                                        $("<a/>").
+                                            attr("href", editHref).
+                                            text("Edit").
+                                            addClass("btn btn-info btn-lg").
+                                            css("display", "block").
+                                            css("position", "absolute").
+                                            css("top", $('.fancybox-skin').height() / 2 - 33).
+                                            css("right", -90)
+                                    );
+                                    clearInterval(interval);
+                                }
+                            }, 0);
+                        }
+                    }
+                });
+
+                // Initializes and creates emoji set from sprite sheet
+                window.emojiPicker = new EmojiPicker({
+                    emojiable_selector: '[data-emojiable=true]',
+                    assetsPath: '/static/emoji-picker-gh-pages/lib/img/',
+                    popupButtonClasses: ''
+                });
+                // Finds all elements with `emojiable_selector` and converts them to rich emoji input fields
+                // You may want to delay this step if you have dynamically created input fields that appear later in the loading process
+                // It can be called as many times as necessary; previously converted input fields will not be converted again
+                window.emojiPicker.discover();
+
+                function resizePosts() {
+                    var w = $(".post-image-container").width();
+                    $(".post-image-container div").each(function() {
+                        $(this).css("width", w);
+                        $(this).css("height", w);
+                    });
+                }
+                window.onresize = resizePosts;
+                resizePosts();
+
+                $(".post-image-drag-and-drop").draggable({
+                    revert: "invalid"
+                });
+                $(".post-image-drag-and-drop").droppable({
+                    "accept": ".post-image-drag-and-drop",
+                    drop: function(event, ui) {
+                        $.post("/swap-posts", {
+                            "id_1": $(this).data("id"),
+                            "id_2": ui.draggable.data("id")
+                        }).then(function(){
+                            document.location.reload();
+                        });
+                    }
+                });
+            });
+
+        </script>
+    {% endblock %}
+{% endblock %}

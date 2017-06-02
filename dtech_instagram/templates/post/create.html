@@ -1,6 +1,17 @@
-{% extends "post/base.html" %}
+{% extends "post/create_base.html" %}
 
 {% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block extend_css %}
+    <link rel="stylesheet" href="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/build/css/bootstrap-datetimepicker.css">
+{% endblock %}
+
+
+{% block drag_drop %}
+    {% include "dragdrop/drag.html" %}
+{% endblock %}
+
 
 {% block container %}
     <ol class="breadcrumb">
@@ -9,9 +20,22 @@
     </ol>
 
     <h1>Schedule a post</h1>
+    <div class="bottom-margin">
+        <label for="upload" class="btn btn-default">Select Image</label>
+        <input id="upload" type="file" name="file" data-url="{{ url_for('upload') }}" style="margin-bottom: 15px; display:none" />
+        <button id="feather_editor" class="btn btn-default pull-right"> EDIT </button>
+
+    </div>
+    <!--<button id="croppie_result"> CROPPING </button>-->
     <form action="{{ url_for('create_post', account_id=account.id) }}" method="POST">
         {% include "post/_form.html" %}
 
         <input class="btn btn-success" type="submit" value="Schedule post" />
     </form>
+{% endblock %}
+
+
+{% block extend_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+<script src="https://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/e8bddc60e73c1ec2475f827be36e1957af72e2ea/src/js/bootstrap-datetimepicker.js"></script>
 {% endblock %}

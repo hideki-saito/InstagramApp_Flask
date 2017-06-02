@@ -1,10 +1,16 @@
-<input id="upload" type="file" name="file" data-url="{{ url_for('upload') }}" style="margin-bottom: 15px;" />
-
-<img id="img" style="cursor: pointer; display: none; margin-bottom: 15px; max-width: 100%;" />
-
+<div class="wrapper_croppie">
+    <img id="img" style="display: none;" src=""/>
+</div>
 {{ form.hidden_tag() }}
 
 {{ wtf.form_errors(form) }}
 
 <div class="caption-textarea">{{ wtf.form_field(form.caption, **{"data-emojiable": "true"}) }}</div>
-{{ wtf.form_field(form.post_at) }}
+<!--{{ wtf.form_field(form.post_at) }}-->
+<label for="post_at" class="control-label"> Post At</label>
+<div id='datetimepicker' class="input-group date" >
+    {{ form.post_at(class_="form-control") }}
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+</div>

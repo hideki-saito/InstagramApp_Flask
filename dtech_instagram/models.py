@@ -50,3 +50,20 @@ class Post(db.Model):
     account = db.relationship("Account", backref=db.backref("posts", order_by="desc(Post.post_at)",
                                                                      cascade="all,delete-orphan",
                                                                      lazy="dynamic"))
+class Folder(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    user_id = db.Column(db.Integer(), db.ForeignKey("user.id", ondelete="CASCADE"))
+    name = db.Column(db.Text())
+
+    user = db.relationship("User", backref=db.backref("folders", order_by="Folder.id",
+                                                      cascade="all, delete-orphan",
+                                                      lazy="dynamic"))
+
+class Image(db.Model):
+    id = db.Column(db.Integer(), primary_key=True)
+    folder_id = db.Column(db.Integer(), db.ForeignKey("folder.id", ondelete="CASCADE"))
+    name = db.Column(db.Text())
+    uri = db.Column(db.Text())
+
+    folder = db.relationship("Folder", backref=db.backref("images",
+                                                                  cascade="all,delete-orphan", lazy="dynamic"))

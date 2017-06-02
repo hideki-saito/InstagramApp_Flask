@@ -1,3 +1,5 @@
+import os
+
 from flask import *
 from flask_security import current_user, login_required
 from flask_wtf import FlaskForm
@@ -7,7 +9,8 @@ from wtforms import fields, validators
 from dtech_instagram.app import app
 from dtech_instagram.db import db
 from dtech_instagram.models import Account
-
+from dtech_instagram.InstagramAPI import Instagram
+from dtech_instagram.worker.analytics import inividual_analytic
 
 class AccountCreateForm(FlaskForm):
     username = fields.StringField("Username", validators=[validators.DataRequired()])
@@ -33,14 +36,23 @@ def create_account():
 
     form = AccountCreateForm()
     if form.validate_on_submit():
-        account = Account()
-        account.user = current_user
-        account.username = form.username.data
-        account.password = form.password.data
-        db.session.add(account)
-        db.session.commit()
+        try:
+            instagram = Instagram(form.username.data, form.password.data, IGDataPath="/tmp/account_%s" % form.username.data)
+            instagram.login()
+        except:
+            return render_template("account/create.html", form=form, error=True)
+        else:
+            account = Account()
+            account.user = current_user
+            account.username = form.username.data
+            account.password = form.password.data
+            db.session.add(account)
+            db.session.commit()
 
-        return redirect(url_for("index"))
+            inividual_analytic(account)
+
+            # os.rename("/tmp/account_%s" % form.username.data, "/tmp/account_%d" % account.id)
+            return redirect(url_for("index"))
 
     return render_template("account/create.html", form=form)
 

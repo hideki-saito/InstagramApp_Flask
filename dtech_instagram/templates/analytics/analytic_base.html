@@ -1,0 +1,206 @@
+{% extends "post/base.html" %}
+
+{% block extend_css %}
+    <link rel="canonical" href="https://www..co"/>
+    <!-- Bootstrap core CSS -->
+    <!--<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">-->
+    <link rel="stylesheet" type="text/css" href="/static/analytics/css/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/analytics/css/bootstrap-tagsinput.css">
+
+    <!--external css-->
+    <link rel="stylesheet" href="/static/analytics/fonts/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/analytics/lineicons/style.css">
+
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="/static/analytics/css/style.css">
+    <link rel="stylesheet" href="/static/analytics/css/style-responsive.css">
+    <link rel="stylesheet" href="/static/analytics/fonts/icomoon/css/icomoon.css">
+    <link rel='shortcut icon' href="/static/analytics/sm-icons/sm-app-icons/favicon.ico" type='image/x-icon'>
+{% endblock %}
+
+{% block container %}
+<span id="overlay"></span>
+<section id="analytics-container">
+    <aside>
+        <div id="sidebar" class="nav-collapse">
+            <!-- sidebar menu start-->
+            <ul class="sidebar-menu" id="nav-accordion">
+                <section id="user-info">
+                    <p class="centered">
+                        <a href="/dashboard"><img
+                            src="{{ profile.pro_pic_url }}"
+                            class="sidebar-user-img img-circle"
+                            onerror="this.src='/static/img/img_placeholder'">
+                        </a>
+                    </p>
+                    <p class="centered">
+                        <span class="sidebar-user-name">{{ profile.username }}</span>
+                    </p>
+                </section>
+
+                <li class="sub-menu">
+                    <a {% if request.endpoint == 'dashboard' %}class="active"{% endif %} href="{{ url_for('dashboard', account_id=account.id) }}">
+                        <span class="sidebar-icon"><i class="fa fa-dashboard "></i></span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="sub-menu">
+                    <a {% if request.endpoint == "followers" %}class="active"{% endif %} href="{{ url_for('followers', account_id=account.id) }}">
+                        <span class="sidebar-icon"><i class="fa fa-bar-chart-o "></i></span>
+                        <span>Follower Trends</span>
+                    </a>
+                </li>
+
+                <li class="sub-menu">
+                    <a {% if request.endpoint == "unfollowers" %}class="active"{% endif %} href="{{ url_for('unfollowers', account_id=account.id) }}">
+                        <span class="sidebar-icon"><i class="fa fa-thumbs-o-down "></i></span>
+                        <span>Unfollowers</span>
+                    </a>
+                </li>
+
+                <li class="sub-menu">
+                    <a {% if request.endpoint == "follow_back" %}class="active"{% endif %}href="{{ url_for('follow_back', account_id=account.id) }}">
+                        <span class="sidebar-icon"><i class="fa fa-user "></i></span>
+                        <span>Follow Back</span>
+                    </a>
+                </li>
+
+                <li class="sub-menu">
+                    <a href="/media/">
+                        <span class="sidebar-icon"><i class="fa fa-bar-chart-o "></i></span>
+                        <span>Post Trends</span>
+                    </a>
+                </li>
+
+                <li class="sub-menu sidebar-logout"><a class="switch-accounts"
+                                                       href="/login/instagram/?next=">
+                    <span class="sidebar-icon"><i class="fa fa-exchange "></i></span>
+                    <span>Switch Accounts</span>
+                </a></li>
+
+                <li class="sub-menu sidebar-logout"><a href="/logout">
+                    <span class="sidebar-icon"><i class="fa fa-long-arrow-right"></i></span>
+                    <span>Logout</span>
+                </a></li>
+
+            </ul>
+        </div>
+    </aside>
+    {% block analytic_content %}
+    {% endblock %}
+</section>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extend_script %}
+    <script type="text/javascript" src="/static/analytics/js/jquery-2.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Load instagram embed method -->
+    <script type="text/javascript" src="/static/analytics/js/embed-insta-image.js"></script>
+
+    <script type="text/javascript" src="/static/analytics/js/main.js"></script>
+    <script type="text/javascript" src="/static/analytics/js/amCharts/amcharts.js"></script>
+    <script type="text/javascript" src="/static/analytics/js/amCharts/serial.js"></script>
+    <script type="text/javascript" src="/static/analytics/js/amCharts/light.js"></script>
+    <script type="text/javascript" src="/static/analytics/js/amCharts/amstock.js"></script>
+    <script type="text/javascript" src="/static/analytics/js/dashboard.js"></script>
+    <script type="text/javascript" src="/static/analytics/js/chart.js"></script>
+
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-tagsinput.min.js"></script>
+
+    <!-- unique scripts -->
+    <script class="include" type="text/javascript" src="/static/js/jquery.dcjqaccordion.2.7.js"></script>
+    <script src="/static/analytics/js/jquery.scrollTo.min.js"></script>
+    <script src="/static/analytics/js/jquery.sparkline.js"></script>
+
+    <!--common script for all pages-->
+    <script src="/static/analytics/js/common-scripts.js"></script>
+
+    <!--script for this page-->
+    <script src="/static/analytics/js/sparkline-chart.js"></script>
+
+
+
+
+    <!-- Google Analytics -->
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r;
+            i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+            a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0];
+            a.async = 1;
+            a.src = g;
+            m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-71851436-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+    <!-- Adroll -->
+    <script type="text/javascript">
+        adroll_adv_id = "PTJ34GUB7ZEYBN3WOWZDM7";
+        adroll_pix_id = "KDETTBMNFBG23EGZPDBCIW";
+        /* OPTIONAL: provide email to improve user identification */
+        /* adroll_email = "username@example.com"; */
+        (function () {
+            var _onload = function () {
+                if (document.readyState && !/loaded|complete/.test(document.readyState)) {
+                    setTimeout(_onload, 10);
+                    return
+                }
+                if (!window.__adroll_loaded) {
+                    __adroll_loaded = true;
+                    setTimeout(_onload, 50);
+                    return
+                }
+                var scr = document.createElement("script");
+                var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
+                scr.setAttribute('async', 'true');
+                scr.type = "text/javascript";
+                scr.src = host + "/j/roundtrip.js";
+                ((document.getElementsByTagName('head') || [null])[0] ||
+                document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
+            };
+            if (window.addEventListener) {
+                window.addEventListener('load', _onload, false);
+            }
+            else {
+                window.attachEvent('onload', _onload)
+            }
+        }());
+    </script>
+     <script>
+        var likes_chart_data = JSON.parse('{{ recent_info.likes_chart_data|safe }}');
+        chart_maker("likes-chart", likes_chart_data)
+
+        var comments_chart_data = JSON.parse('{{ recent_info.comments_chart_data|safe }}');
+        chart_maker("comments-chart", comments_chart_data)
+
+        <!--var engages_chart_data = JSON.parse('{{ recent_info.likes_chart_data|safe }}');-->
+        <!--console.log(chart_data)-->
+        <!--chart_maker("likes-chart", chart_data)-->
+
+    </script>
+
+{% endblock %}
+
+

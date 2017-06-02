@@ -1,0 +1,58 @@
+{% extends "post/base.html" %}
+
+{% block extend_css %}
+<link rel="stylesheet" href="/static/instagram-gallery/instagram-gallery.css" type="text/css"/>
+{% endblock %}
+
+
+{% block container %}
+    <ol class="breadcrumb">
+        <li><a href="{{ url_for('accounts') }}">Accounts</a></li>
+        <li class="active">{{ account.username }}</li>
+    </ol>
+
+        <h1>
+            Posted posts
+        </h1>
+
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+            There was an error retrieving posts from your instagram account.
+            If this problem persists, please, check your password.
+        </div>
+    {% endif %}
+
+    <div class="my-ins">
+        <div class="myig_profile">
+            <div class="user_pic">
+                <img src= "{{ profile.profile_pic_url }}" alt="" title="{{ profile.username }}">
+            </div>
+            <p class="user_name"><a href="http://instagram.com/{{ profile.username }}" target="_BLANK"> {{ profile.username }}</a></p>
+            <p>Name: {{ profile.full_name }} </p>
+            <p>Bio: {{ profile.bio }}</p>
+            <p>Website: <a href="{{ profile.website }}" target="_BLANK">{{ profile.website }}</a></p>
+            <p><strong> {{ now_info.posts_count }} </strong> posts | <strong> {{ now_info.followers_count }} </strong> followers | <strong> {{ now_info.followings_count }} </strong> following</p>
+        </div>
+        <div class="myig_gallery">
+            {% for post in posts %}
+                <div class="user_gallery">
+                    <a href="{{ post.pic_url }}" class="myig_popup" title="{{ post.caption }}" rel="myig_popup">
+                        <img src="{{ post.thum_url }}" alt="" title=" {{ post.caption }} ">
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extend_script %}
+    <script>
+        $(document).ready(function(){
+            $(".myig_popup").fancybox({
+                openEffect : 'fade',
+                closeEffect : 'fade'
+            });
+        });
+    </script>
+{% endblock %}

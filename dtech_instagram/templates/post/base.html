@@ -2,6 +2,9 @@
 
 {% block navbar %}
     <ul class="nav navbar-nav">
+        <li {% if 'analytics' in request.path  %}class="active"{% endif %}>
+            <a href="{{ url_for('dashboard', account_id=account.id) }}">Analytics</a>
+        </li>
         <li {% if request.endpoint == 'create_post' %}class="active"{% endif %}>
             <a href="{{ url_for('create_post', account_id=account.id) }}">Schedule a post</a>
         </li>

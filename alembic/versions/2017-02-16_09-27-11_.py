@@ -49,6 +49,59 @@ def upgrade():
     sa.ForeignKeyConstraint(['role_id'], ['role.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], )
     )
+    op.create_table('folder',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.Text(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('image',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('folder_id', sa.Integer(), nullable=False),
+    sa.Column('name', sa.Text(), nullable=False),
+    sa.Column('uri', sa.Text(), nullable=False),
+    sa.ForeignKeyConstraint(['folder_id'], ['folder.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
+    )
+
+    op.create_table('ins__history',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('account_id', sa.Integer(), nullable=False),
+    sa.Column('history_at', sa.DateTime(), nullable=False),
+    sa.Column('followers_count', sa.Integer(), nullable=False),
+    sa.Column('followings_count', sa.Integer(), nullable=False),
+    sa.Column('posts_count', sa.Integer(), nullable=False),
+    sa.Column('likes_count', sa.Integer(), nullable=False),
+    sa.Column('comments_count', sa.Integer(), nullable=False),
+    sa.ForeignKeyConstraint(['account_id'], ['account.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('ins__posted',
+    sa.Column('media_id', sa.Text(), nullable=False),
+    sa.Column('account_id', sa.Integer(), nullable=False),
+    sa.Column('code', sa.Text(), nullable=False),
+    sa.Column('pic_url', sa.Text(), nullable=False),
+    sa.Column('thum_url', sa.Text(), nullable=False),
+    sa.Column('caption', sa.Text(), nullable=False),
+    sa.Column('likes_count', sa.Integer(), nullable=False),
+    sa.Column('comments_count', sa.Integer(), nullable=False),
+    sa.Column('taken_at', sa.DateTime(), nullable=False),
+    sa.ForeignKeyConstraint(['account_id'], ['account.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('media_id')
+    )
+    op.create_table('ins_profile',
+    sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('account_id', sa.Integer(), nullable=False),
+    sa.Column('pro_pic_url', sa.Text(), nullable=True),
+    sa.Column('username', sa.Text(), nullable=False),
+    sa.Column('full_name', sa.Text(), nullable=False),
+    sa.Column('bio', sa.Text(), nullable=True),
+    sa.Column('website', sa.Text(), nullable=True),
+    sa.ForeignKeyConstraint(['account_id'], ['account.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
+    )
+
     ### end Alembic commands ###
 
 

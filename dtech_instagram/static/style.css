@@ -1,0 +1,61 @@
+.custom-navbar {
+    border-radius: 0;
+    margin-bottom: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+.creat-post-form {
+    margin-top: 60px;
+}
+
+#feather-editor {
+    margin-bottom: 15px;
+}
+
+#img {
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    height: 350px
+}
+
+.bottom-margin{
+    margin-bottom: 15px;
+}
+
+.flex {
+    display: flex;
+}
+
+.button {
+    cursor: pointer;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.wrapper_croppie {
+    position: relative;
+    background-color: #808080;
+    height: 350px;
+    margin-bottom: 50px;
+    border: 1px solid #d2dbe3;
+}
+
+.fixed-parent-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+    padding: 0px 15px;
+}
+
+#datetimepicker {
+    width: 100%;
+    margin-bottom: 30px;
+}

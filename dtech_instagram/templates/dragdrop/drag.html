@@ -1,0 +1,46 @@
+<div class="sidebar-container col-xs-3">
+    <nav class="navbar navbar-default" style="border-radius: 0; margin-bottom: 0;">
+        <ul class="nav navbar-nav">
+            <li>
+                <a href="#">Image</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="sidebar-header">
+        <div class="thumbnail">
+            <img src=""/>
+        </div>
+        <div class="thumbnail-nav">
+            <span id="pointer-preview" class="pointer">&larr;</span>
+            <span id="pointer-next" class="pointer">&rarr;</span>
+        </div>
+    </div>
+    <div class="tree">
+        {% for folder, folder_images in images.items() %}
+            <div class="acidjs-css3-treeview">
+                <ul>
+                    <li id="folder-{{folder.id}}" class="folder">
+                        <input type="checkbox" id="foldercheck-{{folder.id}}" checked="checked"><label><input type="checkbox"><span></span></label><label draggable="true" ondragstart="window.imageManager.drag(event)" ondrop="window.imageManager.drop(event)" ondragover="window.imageManager.allowDrop(event)" for="foldercheck-{{folder.id}}">{{ folder.name }}</label>
+                        <ul>
+                            {% for image in folder_images %}
+                            <li id={{image.uri}} class="leaf"><input type="checkbox" id="imagecheck-{{image.id}}"><label><input type="checkbox"><span></span></label><label ondragover="window.imageManager.allowDrop(event)" draggable="true" ondragstart="window.imageManager.drag(event)" for="imagecheck-{{image.id}}">{{ image.name }}</label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="sidebar-footer">
+        <button id="showModal-new" class="btn-block btn-success">New Folder</button>
+
+        <form id="upload-form" method="post" enctype="multipart/form-data" style="margin-top:5px;">
+            <label for="upload_images" class="btn-block btn-success modal-button">Upload</label>
+            <input id="upload_images" style="display:none;" type="file" name="file[]" multiple>
+        </form>
+
+        <button id="showModal-rename" class="btn-block btn-success">Rename</button>
+        <button id="delete-images" class="btn-block btn-success">Delete</button>
+    </div>
+</div>
